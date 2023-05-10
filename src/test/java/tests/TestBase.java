@@ -6,6 +6,7 @@ import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.logevents.SelenideLogger;
 import com.codeborne.selenide.testng.ScreenShooter;
 import com.github.javafaker.Faker;
+import io.qameta.allure.Step;
 import io.qameta.allure.selenide.AllureSelenide;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.testng.annotations.AfterMethod;
@@ -17,6 +18,7 @@ import static com.codeborne.selenide.Selenide.open;
 public class TestBase {
     Faker faker = new Faker();
     @BeforeMethod
+    @Step("Open the browser")
     public void setUp() {
         SelenideLogger.addListener("allure", new AllureSelenide());
         Configuration.reportsFolder = "test-result/reports";
@@ -26,10 +28,13 @@ public class TestBase {
     }
 
     @AfterMethod
+    @Step("Close the browser")
     public void closeBrowser() {
         Selenide.closeWebDriver();
     }
 
+
+    @Step("Check the error text")
     public void checkErrorText(String errorText) {
         $x("//div[@class=\"error-message-container error\"]")
                 .shouldBe(Condition.visible)
